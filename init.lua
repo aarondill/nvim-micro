@@ -94,6 +94,6 @@ clone("bufferline", "akinsho/bufferline.nvim", function()
   })
 end)
 
+require("options")
 require("maps")
 require("autocmds")
-require("options")
