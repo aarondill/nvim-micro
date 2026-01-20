@@ -17,11 +17,12 @@ end
 
 local function get_vtext()
   local mode = vim.fn.mode()
-  if mode ~= "v" and mode ~= "V" and mode ~= "" then return nil end
+  if mode ~= "v" and mode ~= "V" and mode ~= "" then
+    return nil
+  end
   local lines = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"), { type = vim.fn.mode() })
   return table.concat(lines, "\n")
 end
-
 
 --- KEYMAPS ----
 
@@ -35,8 +36,12 @@ end
 local function line_not_empty(input) ---@return fun(): string?
   return function()
     local vtext = get_vtext() or get_cursorline_contents()
-    if not vtext then return end
-    if not vtext:find("^%s*$") then return input end -- not empty
+    if not vtext then
+      return
+    end
+    if not vtext:find("^%s*$") then
+      return input
+    end -- not empty
   end
 end
 local function toggle_movement(first, second) ---@return fun()
@@ -46,13 +51,17 @@ local function toggle_movement(first, second) ---@return fun()
     local row, col = unpack(vim.api.nvim_win_get_cursor(0), 1, 2)
     vim.api.nvim_feedkeys(first, "nx", false) -- run first -- note: 'x' is needed to ensure that it happens *now*
     local nrow, ncol = unpack(vim.api.nvim_win_get_cursor(0), 1, 2)
-    if row ~= nrow or col ~= ncol then return end -- it moved!
+    if row ~= nrow or col ~= ncol then
+      return
+    end -- it moved!
     return vim.api.nvim_feedkeys(second, "n", false) -- run then
   end
 end
 ---Use in an expr mapping. returns <cmd>%s<cr> but with count supported
 local function cmd_mapping(cmd)
-  return function() return ("<cmd>%d%s<cr>"):format(vim.v.count1, cmd) end
+  return function()
+    return ("<cmd>%d%s<cr>"):format(vim.v.count1, cmd)
+  end
 end
 
 -- map up/down to move over screen lines instead of file lines (only matters with 'wrap')
@@ -95,9 +104,15 @@ map("n", "<leader>fn", "<cmd>enew<cr>", "New File")
 map("n", "[q", vim.cmd.cprev, "Previous quickfix")
 map("n", "]q", vim.cmd.cnext, "Next quickfix")
 -- diagnostic
-map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next Diagnostic")
-map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, "Prev Diagnostic")
-map("n", "gl", function() return vim.diagnostic.open_float({ focusable = true }) end, "Diagnostic")
+map("n", "]d", function()
+  vim.diagnostic.jump({ count = 1 })
+end, "Next Diagnostic")
+map("n", "[d", function()
+  vim.diagnostic.jump({ count = -1 })
+end, "Prev Diagnostic")
+map("n", "gl", function()
+  return vim.diagnostic.open_float({ focusable = true })
+end, "Diagnostic")
 -- toggle options
 
 ---@param silent boolean?
@@ -107,9 +122,13 @@ local function toggle_option(option, values, silent)
   silent, values = silent or false, values or { true, false }
   return function()
     local new_value = values[1]
-    if vim.opt_local[option]:get() == values[1] then new_value = values[2] end
+    if vim.opt_local[option]:get() == values[1] then
+      new_value = values[2]
+    end
     vim.opt_local[option] = new_value
-    if silent then return end -- Don't notify!
+    if silent then
+      return
+    end -- Don't notify!
     local msg = (new_value == true and "Enabled %s") or (new_value == false and "Disabled %s") or "Set %s to %s"
     vim.notify(msg:format(option, new_value), vim.log.levels.INFO)
   end
@@ -217,12 +236,16 @@ map({ "n", "x" }, "\\", "@:", "Backslash redoes the last command")
 
 map("x", "<C-/>", function()
   -- If :Telescope command doesn't exist, call :grep instead
-  if vim.fn.exists(":Telescope") == 2 then return "<Cmd>Telescope grep_string<Cr>" end
+  if vim.fn.exists(":Telescope") == 2 then
+    return "<Cmd>Telescope grep_string<Cr>"
+  end
   return ":<C-u>grep <C-r><C-w>"
 end, "Grep for the selected string", { expr = true })
 
 map("n", "<bs>", function()
-  if vim.fn.getreg("#") == "" then return "<cmd>bn<cr>" end
+  if vim.fn.getreg("#") == "" then
+    return "<cmd>bn<cr>"
+  end
   return "<c-^>"
 end, { silent = true, noremap = true, expr = true })
 
@@ -245,5 +268,3 @@ map("c", "<c-e>", "<End>", "End of line")
 
 --- Enter opens command line
 map({ "n", "v" }, "<CR>", ":", "Enter command line")
-
-map({"n"}, "<Leader>bd", ":bdelete")
