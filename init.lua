@@ -30,6 +30,8 @@ clone("tokyonight", "folke/tokyonight.nvim", function()
   vim.cmd.colorscheme("tokyonight-night")
 end)
 
+clone("actually", "mong8se/actually.nvim")
+
 clone("mini.bufremove", "nvim-mini/mini.bufremove", function()
   vim.keymap.set("n", "<leader>bd", function()
     local bd = require("mini.bufremove").delete
