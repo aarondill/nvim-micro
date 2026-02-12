@@ -20,7 +20,7 @@ create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, function()
   if vim.o.buftype == "nofile" then return end
   return vim.cmd.checktime()
 end, { group = augroup })
-create_autocmd("TextYankPost", function() return vim.hl.on_yank() end, { group = augroup })
+create_autocmd("TextYankPost", function() return vim.hl and vim.hl.on_yank() end, { group = augroup })
 create_autocmd({ "VimResized" }, function()
   local current_tab = vim.fn.tabpagenr()
   vim.cmd("tabdo wincmd =")
