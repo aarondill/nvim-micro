@@ -106,7 +106,7 @@ o.spellcapcheck = ""
 g.autoformat = true -- Enable LazyVim auto format
 
 o.foldlevel = 99
-o.clipboard = "unnamedplus" -- Sync with system clipboard
+-- o.clipboard = "unnamedplus" -- Sync with system clipboard
 o.completeopt = "menu,menuone,noselect"
 o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 o.cursorline = true -- Enable highlighting of the current line
